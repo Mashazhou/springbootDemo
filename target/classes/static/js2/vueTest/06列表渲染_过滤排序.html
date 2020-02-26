@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../lib/vue.js"></script>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <input type="text" v-model="searchName">
+        <ul>
+            <li v-for="(p,index) in searchPersons" :key="index">
+                {{index}}--{{p.name}}--{{p.age}}
+            </li>
+        </ul>
+        <button @click="setOrderType('asc')">年龄升序</button>
+        <button @click="setOrderType('desc')">年龄降序</button>
+        <button @click="setOrderType('')">年龄原本顺序</button>
+    </div>
+
+</body>
+<script>
+    // var timer1;
+    // function t(){
+    //     var flag =	document.getElementById("J_LinkBuy").click();
+    //     if(!flag){
+    //         timer1 = setTimeout(function () {
+    //             console.log("失败")
+    //             t();
+    //         },100);
+    //     }else {
+    //         clearTimeout(timer1);
+    //         console.log("成功");
+    //     }
+    // };
+    // t();
+
+
+
+
+
+    var vm = new Vue({
+        el : "#app",
+        data : {
+            searchName : "",
+            orderType : "asc",
+            persons : [
+                {name : 'zhangsan',age : 12},
+                {name : 'lisi',age : 14},
+                {name : 'wangwu',age : 16},
+                {name : 'zhuliu',age : 5}
+            ]
+        },
+        computed:{
+            searchPersons(){
+                //去相关的数
+                const {searchName,persons} = this;
+
+                //过滤后的数
+                //方法一(针对数组的filter函数)
+                // let personsAfter = persons.filter(p => p.name.indexOf(searchName) > -1);
+
+                //方法二
+                function f(item) {
+                    return item.name.indexOf(searchName) > -1;
+                }
+
+                let personsAfter = persons.filter(f);
+
+                if(this.orderType){
+                    /*  若 a 小于 b，在排序后的数组中 a 应该出现在 b 之前，则返回一个小于 0 的值。
+                        若 a 等于 b，则返回 0。
+                        若 a 大于 b，则返回一个大于 0 的值*/
+                    personsAfter.sort((a,b) => {
+
+                        if(this.orderType == "asc"){
+                            return a.age - b.age;
+
+                        }else if(this.orderType == "desc"){
+                            return b.age - a.age;
+                        }
+
+                    });
+                }
+
+
+                return personsAfter;
+
+            }
+        },
+        methods : {
+            setOrderType(orderType){
+                this.orderType = orderType;
+            }
+        }
+
+    })
+
+</script>
+</html>

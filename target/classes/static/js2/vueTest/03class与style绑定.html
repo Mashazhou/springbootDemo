@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../lib/vue.js"></script>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+
+        .inner{
+            height: 150px;
+            background-color: darkcyan;
+        }
+
+        .aclass{
+            color : darkcyan;
+        }
+
+        .bclass{
+            color : red;
+        }
+
+        .cclass{
+            font-style: italic;
+        }
+
+        .dclass{
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!--
+     1. 绑定class/style，实现动态样式
+     2. class绑定： :class='xxx'
+        xxx是 字符串 或 对象 或 数组
+     3. style绑定
+        :style = "{color : activeColor , fontSize : fontSize + 'px'}"
+        activeColor,fontSize 是data属性
+    -->
+    <div id="app">
+        <h2>1. class绑定</h2>
+        <p class="aclass">class 是字符串</p>
+        <p :class="ac">class 是字符串</p>
+        <p :class="{aclass : isa,cclass : isc}">class 是对象</p>
+        <h2>2. style绑定</h2>
+        <p style="color: rebeccapurple;font-weight: bold">style原生</p>
+        <p :style="{color : activeColor , fontSize : fontSize + 'px'}">style绑定</p>
+    </div>
+
+
+</body>
+<script>
+    var vm = new Vue({
+        el : "#app",
+        data : {
+            ac : 'bclass',
+            class1 : 'aclass',
+            class2 : 'cclass',
+            isa : true,
+            isc : true,
+            activeColor : 'orange',
+            fontSize : 50
+        }
+    })
+
+</script>
+</html>

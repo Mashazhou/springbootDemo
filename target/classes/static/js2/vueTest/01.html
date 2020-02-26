@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../lib/vue.js"></script>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+
+        .inner{
+            height: 150px;
+            background-color: darkcyan;
+        }
+    </style>
+</head>
+
+
+<body>
+    <div id="app">
+        <h1>v-bind:(:) v-on:(@)</h1>
+        <!-- v-cloak 解决插入表达式闪烁的问题-->
+        <p v-cloak>++{{ msg }}--</p>
+        <h4 v-text="msg">===</h4>
+        <!-- msg 会替换元素的内容-->
+
+        <div v-text="msg2"></div>
+        <div v-html="msg2"></div>
+
+        <!-- 1，v-bind: 绑定属性title 把“”里的内容当成js
+             2，v-bind: 可缩写成:
+        -->
+        <!--<input type="button" value="按钮1" v-bind:title="mytitle + 'lallala'" />-->
+        <!--<input type="button" value="按钮2" :title="mytitle + 'lallala'" />-->
+
+        <!-- 1,v-on: 绑定事件
+             2,v-on: 可缩写为@
+        -->
+        <!--<input type="button" value="按钮3" :title="mytitle + 'lallala'" v-on:click="show"/>-->
+        <input type="button" value="按钮3" :title="mytitle + 'lallala'" @click="show2"/>
+        <hr/>
+        <div>{{mytitle}}</div>
+        <input type="button" value="开始"  @click="show3"/>
+        <input type="button" value="停止"  @click="stop"/>
+
+        <hr/>
+        <h1>事件修饰符</h1>
+        <div class="inner" @click="divHandler">
+            <!--<input type="button" value="戳一下" @click.stop="btnHandler">-->
+            <input type="button" value="戳一下" @click.stop="btnHandler">
+        </div>
+
+        <a href="http://www.baidu.com" @click.prevent="linkClick">找度娘</a>
+        <hr/>
+        <!-- .capture 如果子元素触发click事件，则先执行父元素click事件，再执行子元素click事件-->
+        <div class="inner" @click.capture="divHandler">
+            <input type="button" value="戳一下2" @click="btnHandler">
+        </div>
+
+        <hr/>
+        <!-- .self 只能被本元素触发，不会被子元素冒泡触发等-->
+        <div class="inner" @click.self="divHandler">
+            <input type="button" value="戳一下3" @click="btnHandler">
+        </div>
+
+
+        <a href="http://www.baidu.com" @click.prevent.once="linkClick">找度娘2</a>
+        <hr/>
+
+        <h1>v-model 双向数据绑定,只能运用在表单元素中</h1>
+        <div>{{msg}}</div>
+        <input type="text" v-model="msg">
+        <h3>简易计算器</h3>
+        <input type="text" v-model="n1">
+        <select name="" id="" v-model="opt">
+            <option value="+">+</option>
+            <option value="-">-</option>
+            <option value="*">*</option>
+            <option value="/">/</option>
+        </select>
+        <input type="text" v-model="n2">
+        <button @click="calc">=</button>
+        <input type="text" v-model="result">
+
+
+    </div>
+
+
+</body>
+
+<script>
+    var vm = new Vue({
+        el : '#app',
+        data : {
+            msg : 'hello world.',
+            msg2 : '<h1>I am h1</h1>',
+            mytitle : '我是标题',
+            time1 : null,//定义一个定时器
+            num : 0,
+            n1 : 0,
+            n2 : 0,
+            result : 0,
+            opt : '+'
+        },
+        methods:{
+            show:function () {
+                alert(this.mytitle);
+            },
+
+            show2:function() {
+                var _this = this;
+                var num = 0;
+                var title = _this.mytitle;
+                var time = setInterval(function () {
+                    _this.mytitle = title + (++num);
+                },500);
+            },
+
+            show3() {
+                var _this = this;
+                var num = this.num;
+                var title = _this.mytitle.substring(0,4);
+                //不能重复启动
+                if(this.time1 != null) return;
+                //=> 就可以直接写this
+                this.time1 = setInterval( () =>{
+                    this.num = ++num;
+                    this.mytitle = title + num;
+
+                },500);
+            },
+
+            stop(){
+              clearInterval(this.time1);
+              this.time1 = null;
+            },
+
+            //事件修饰符
+            /**
+             * (1)  .stop 阻止冒泡
+             * (2)  .prevent 阻止默认事件
+             * (3)  .capture 添加事件侦听器时使用事件捕获模式
+             * (4)  .self 只当事件在该元素本身(比如不是子元素)触发时触发回调
+             * (5)  .once 事件只触发一次
+             */
+            divHandler(){
+                console.log("AAAAAAA");
+            },
+            btnHandler(){
+                console.log("BBBBBBB");
+            },
+            linkClick(){
+                console.log('触发链接click事件')
+            },
+
+            calc : function () {
+                var calcStr = "parseFloat(this.n1)" + this.opt + "parseFloat(this.n2)";
+                //eval() 少用
+                this.result = eval(calcStr);
+            }
+
+        }
+    })
+
+
+</script>
+
+</html>

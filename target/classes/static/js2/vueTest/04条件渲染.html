@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../lib/vue.js"></script>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!--
+     1,条件渲染指令
+        v-if,
+        v-else,
+        v-show
+
+     2,比较v-if和v-show
+       如果需要频繁切换 v-show 较好,
+       v-if,v-else 会移除标签
+       v-show 是通过样式隐藏
+
+    -->
+    <div id="app">
+
+        <p id="id1" v-if="ok">success</p>
+        <p id="id2" v-else>fail</p>
+
+        <p id="id3" v-show="ok">成功</p>
+        <p id="id4" v-show="!ok">失败</p>
+
+        <button @click="ok = !ok">切换</button>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el : "#app",
+        data : {
+            ok : true
+        },
+        methods : {
+
+        }
+
+    })
+
+</script>
+</html>
