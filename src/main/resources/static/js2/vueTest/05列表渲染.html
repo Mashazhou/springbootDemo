@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../lib/vue.js"></script>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h2>遍历数组</h2>
+        <!--key的作用主要是为了高效的更新虚拟DOM-->
+        <ul v-for="(p,index) in persons" :key="index">
+            <li>{{index}}>>>{{p.name}}>>>{{p.age}}
+                <button @click="insert(index)">新增</button>
+                <button @click="update(index)">更新</button>
+                <button @click="deleteFk(index)">删除</button>
+            </li>
+        </ul>
+
+        <h2>遍历对象</h2>
+        <ul v-for="(val,key) in persons[1]" :key="key">
+            <li>{{key}}--{{val}}</li>
+        </ul>
+    </div>
+
+</body>
+<script>
+    var vm = new Vue({
+        el : "#app",
+        data : {
+            persons : [
+                {name : 'zhangsan',age : 12},
+                {name : 'lisi',age : 14},
+                {name : 'wangwu',age : 16},
+                {name : 'zhuliu',age : 5}
+            ],
+
+            dog : {name : 'jerry',age : 11}
+
+        },
+        methods : {
+            update(index){
+                //不能用
+                //vue本身只是监视了persons的改变，没有监视数组内部数据的改变
+                //vue重写了数组中的一系列改变数组内部数据的方法（先调用原生，再更新页面）-->数组内部变化，界面自动变化
+                //this.persons[index] = this.dog;
+                this.persons.splice(index,1,this.dog);
+            },
+            deleteFk(index) {
+                this.persons.splice(index,1);
+            },
+            insert : function (index) {
+                this.persons.splice(index,0,this.dog);
+            }
+        }
+
+    })
+
+</script>
+</html>
